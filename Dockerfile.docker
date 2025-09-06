@@ -1,0 +1,67 @@
+# Multi-stage build for Docker deployment
+FROM node:20-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Set environment variables for build
+ENV NODE_ENV=production
+ENV VITE_SUPABASE_URL=https://gcgejeliljokhkuvpsxf.supabase.co
+ENV VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDU5OTk5OTksImV4cCI6MTk2MTU3NTk5OX0.placeholder_key_for_production_build
+ENV SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY0NTk5OTk5OSwiZXhwIjoxOTYxNTc1OTk5fQ.placeholder_service_key_for_production_build
+
+# Disable prerendering for Docker build
+RUN sed -i 's/export const prerender = true;/export const prerender = false;/' src/routes/+page.ts src/routes/+layout.ts
+
+# Build the application
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine AS production
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+# Create app user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodeuser -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy built application from builder stage
+COPY --from=builder --chown=nodeuser:nodejs /app/.svelte-kit/output ./
+COPY --from=builder --chown=nodeuser:nodejs /app/package*.json ./
+
+# Install only production dependencies
+RUN npm ci --only=production --no-audit --no-fund
+
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV VITE_SUPABASE_URL=https://gcgejeliljokhkuvpsxf.supabase.co
+ENV VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDU5OTk5OTksImV4cCI6MTk2MTU3NTk5OX0.placeholder_key_for_production_build
+
+# Switch to non-root user
+USER nodeuser
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Start the application
+EXPOSE 3000
+ENV PORT=3000
+CMD ["node", "server/index.js"]

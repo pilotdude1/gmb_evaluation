@@ -1,0 +1,64 @@
+
+# Multi-stage build for production
+FROM node:20-alpine AS builder
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including dev dependencies for build)
+RUN npm ci
+
+# Copy source code (including module templates)
+COPY . .
+
+# Ensure module templates are properly built
+RUN echo "Building module templates system..." \
+    && ls -la src/lib/modules/templates/ || echo "Module templates directory not found" \
+    && ls -la src/routes/test-templates/ || echo "Test templates directory not found"
+
+# Build the application
+RUN npm run build
+
+# Production stage
+FROM node:20-alpine AS production
+
+# Install dumb-init for proper signal handling
+RUN apk add --no-cache dumb-init
+
+# Create app user (fixed name for SvelteKit project)
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodeuser -u 1001
+
+# Set working directory
+WORKDIR /app
+
+# Copy built application from builder stage
+COPY --from=builder --chown=nodeuser:nodejs /app/build ./build
+COPY --from=builder --chown=nodeuser:nodejs /app/package*.json ./
+
+# Install production dependencies only
+RUN npm ci --only=production
+
+# Set environment variables for Supabase
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV VITE_SUPABASE_URL=""
+ENV VITE_SUPABASE_ANON_KEY=""
+ENV SUPABASE_SERVICE_ROLE_KEY=""
+
+# Switch to non-root user
+USER nodeuser
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"
+
+# Start the application
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "build"] 

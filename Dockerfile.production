@@ -1,0 +1,126 @@
+# Multi-stage production build for SvelteKit application
+# Optimized for performance, security, and minimal image size
+
+# Stage 1: Build stage
+FROM node:20-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    libc6-compat
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files first for better layer caching
+COPY package*.json ./
+COPY pnpm-lock.yaml* ./
+
+# Configure npm for production builds
+RUN npm config set registry https://registry.npmjs.org/ && \
+    npm config set fetch-retries 3 && \
+    npm config set fetch-retry-mintimeout 5000 && \
+    npm config set fetch-retry-maxtimeout 60000
+
+# Install dependencies with optimizations
+RUN npm ci --omit=dev --ignore-scripts && \
+    npm ci --ignore-scripts
+
+# Copy source code
+COPY . .
+
+# Remove unnecessary files to reduce build context (keep static files for build)
+RUN rm -rf \
+    tests/ \
+    playwright-report/ \
+    test-results/ \
+    markdown-files/ \
+    scripts/ \
+    grafana/ \
+    prometheus/ \
+    postgres/ \
+    sql-files/ \
+    docker-compose*.yml \
+    Dockerfile* \
+    *.sh \
+    *.md \
+    *.sql \
+    *.yml \
+    *.yaml \
+    .env* \
+    .git/ \
+    .gitignore \
+    .dockerignore \
+    tmp/ \
+    vps_key
+
+# Set build-time environment variables for prerendering
+ENV VITE_SUPABASE_URL="https://placeholder.supabase.co" \
+    VITE_SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDU5OTk5OTksImV4cCI6MTk2MTU3NTk5OX0.placeholder_key_for_build_time_only" \
+    SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY0NTk5OTk5OSwiZXhwIjoxOTYxNTc1OTk5fQ.placeholder_service_key_for_build_time_only"
+
+# Build the application
+RUN npm run build
+
+# Stage 2: Production stage
+FROM node:20-alpine AS production
+
+# Install dumb-init for proper signal handling and security
+RUN apk add --no-cache dumb-init
+
+# Create non-root user for security
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodeuser -u 1001 -G nodejs
+
+# Set working directory
+WORKDIR /app
+
+# Copy built application from builder stage
+COPY --from=builder --chown=nodeuser:nodejs /app/build ./build
+COPY --from=builder --chown=nodeuser:nodejs /app/package*.json ./
+
+# Install only production dependencies
+RUN npm ci --omit=dev --ignore-scripts && \
+    npm cache clean --force
+
+# Create necessary directories with proper permissions
+RUN mkdir -p /app/logs && \
+    chown -R nodeuser:nodejs /app
+
+# Set environment variables
+ENV NODE_ENV=production \
+    PORT=3000 \
+    HOST=0.0.0.0 \
+    NODE_OPTIONS="--max-old-space-size=512"
+
+# Supabase configuration (to be overridden by environment)
+ENV VITE_SUPABASE_URL="" \
+    VITE_SUPABASE_ANON_KEY="" \
+    SUPABASE_SERVICE_ROLE_KEY=""
+
+# Security configuration
+ENV CSRF_SECRET="" \
+    JWT_SECRET=""
+
+# Mailgun configuration (optional)
+ENV MAILGUN_API_KEY="" \
+    MAILGUN_DOMAIN="" \
+    MAILGUN_REGION="us"
+
+# Switch to non-root user
+USER nodeuser
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:3000', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })" || exit 1
+
+# Use dumb-init to handle signals properly
+ENTRYPOINT ["dumb-init", "--"]
+
+# Start the application
+CMD ["node", "build"]

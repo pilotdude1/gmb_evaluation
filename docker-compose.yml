@@ -1,0 +1,126 @@
+services:
+  # Main application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.minimal
+    container_name: localsocialmax-dev
+    volumes:
+      - .:/workspaces/module_base
+      - node_modules:/workspaces/module_base/node_modules
+    ports:
+      - '5173:5173'
+      - '5174:5174'
+      - '5175:5175'
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/localsocialmax
+      - REDIS_URL=redis://redis:6379
+      # Mailgun Configuration
+      - MAILGUN_API_KEY=${MAILGUN_API_KEY}
+      - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
+      - MAILGUN_REGION=${MAILGUN_REGION:-us}
+    working_dir: /workspaces/module_base
+    command: /bin/bash -c "sudo chown -R nodeuser:nodeuser /workspaces/module_base/node_modules && npm install && npm run dev -- --host 0.0.0.0 --port 5173"
+    depends_on:
+      - postgres
+      - redis
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: localsocialmax-postgres
+    environment:
+      POSTGRES_DB: localsocialmax
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: localsocialmax-redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+  # Grafana Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: localsocialmax-grafana
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: false
+    ports:
+      - '3001:3000'
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+
+  # Prometheus Metrics
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: localsocialmax-prometheus
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+
+  # pgAdmin (PostgreSQL Admin)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: localsocialmax-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@localsocialmax.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  # MinIO (Object Storage)
+  minio:
+    image: minio/minio:latest
+    container_name: localsocialmax-minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - '9000:9000' # API
+      - '9001:9001' # Console
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+
+volumes:
+  node_modules:
+  postgres_data:
+  redis_data:
+  grafana_data:
+  prometheus_data:
+  pgadmin_data:
+  minio_data:

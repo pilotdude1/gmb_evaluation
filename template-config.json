@@ -1,0 +1,117 @@
+{
+  "project": {
+    "name": "LocalSocialMax",
+    "description": "A complete SaaS development foundation",
+    "version": "1.0.0",
+    "author": "Your Name",
+    "license": "MIT"
+  },
+  "branding": {
+    "name": "LocalSocialMax",
+    "tagline": "Your Social Media Management Platform",
+    "primaryColor": "#3B82F6",
+    "secondaryColor": "#1E40AF",
+    "accentColor": "#F59E0B",
+    "logo": "/static/logo.svg",
+    "favicon": "/static/favicon.svg"
+  },
+  "features": {
+    "authentication": {
+      "enabled": true,
+      "providers": ["email", "google", "github", "facebook", "magic-link"],
+      "requireEmailVerification": true,
+      "allowSignUp": true
+    },
+    "database": {
+      "type": "postgresql",
+      "host": "postgres",
+      "port": 5432,
+      "name": "localsocialmax",
+      "user": "postgres",
+      "password": "password"
+    },
+    "monitoring": {
+      "grafana": {
+        "enabled": true,
+        "port": 3001,
+        "adminPassword": "admin"
+      },
+      "prometheus": {
+        "enabled": true,
+        "port": 9090
+      }
+    },
+    "storage": {
+      "type": "minio",
+      "endpoint": "minio:9000",
+      "accessKey": "minioadmin",
+      "secretKey": "minioadmin",
+      "bucket": "localsocialmax"
+    },
+    "email": {
+      "provider": "mailhog",
+      "host": "mailhog",
+      "port": 1025
+    }
+  },
+  "services": {
+    "app": {
+      "port": 5173,
+      "devPorts": [5174, 5175]
+    },
+    "postgres": {
+      "port": 5432,
+      "adminPort": 5050
+    },
+    "redis": {
+      "port": 6379
+    },
+    "mailhog": {
+      "smtpPort": 1025,
+      "webPort": 8025
+    },
+    "minio": {
+      "apiPort": 9000,
+      "consolePort": 9001
+    }
+  },
+  "development": {
+    "docker": {
+      "enabled": true,
+      "composeFile": "docker-compose.yml",
+      "devScript": "docker-dev.sh"
+    },
+    "typescript": {
+      "enabled": true,
+      "strict": true
+    },
+    "linting": {
+      "eslint": true,
+      "prettier": true
+    },
+    "testing": {
+      "playwright": true,
+      "vitest": true
+    }
+  },
+  "deployment": {
+    "platforms": ["vercel", "netlify", "railway", "fly.io"],
+    "environments": ["development", "staging", "production"],
+    "ci": {
+      "github": true,
+      "gitlab": false
+    }
+  },
+  "customization": {
+    "instructions": [
+      "1. Update branding in template-config.json",
+      "2. Modify src/app.css for colors and styling",
+      "3. Update src/lib/supabaseClient.ts with your Supabase project",
+      "4. Add your database schema to init-db.sql",
+      "5. Customize components in src/lib/components/",
+      "6. Add your business logic to src/routes/",
+      "7. Configure monitoring in prometheus/prometheus.yml",
+      "8. Set up your domain and SSL certificates"
+    ]
+  }
+}

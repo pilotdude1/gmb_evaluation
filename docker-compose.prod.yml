@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # Production SvelteKit Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: localsocialmax-prod
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "require('http').get('http://localhost:3000', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      # Supabase Configuration
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_ANON_KEY=${VITE_SUPABASE_ANON_KEY}
+      # Security Configuration
+      - CSRF_SECRET=${CSRF_SECRET}
+      # Mailgun Configuration (if using)
+      - MAILGUN_API_KEY=${MAILGUN_API_KEY}
+      - MAILGUN_DOMAIN=${MAILGUN_DOMAIN}
+      - MAILGUN_REGION=${MAILGUN_REGION:-us}
+    volumes:
+      - app_data:/app/build
+    networks:
+      - app-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: localsocialmax-nginx
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+      - app_data:/var/www/html
+    depends_on:
+      - app
+    networks:
+      - app-network
+
+  # Optional: PostgreSQL (if not using Supabase)
+  postgres:
+    image: postgres:15-alpine
+    container_name: localsocialmax-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: localsocialmax
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    profiles:
+      - database
+
+volumes:
+  app_data:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: sveltekit_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-sveltekit_app}
+      POSTGRES_USER: ${DB_USER:-app_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: '--encoding=UTF8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8'
+
+    volumes:
+      - ./postgres/data:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    ports:
+      - '5432:5432'
+    networks:
+      - app_network
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${DB_USER:-app_user} -d ${DB_NAME:-sveltekit_app}',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for sessions/caching
+  redis:
+    image: redis:7-alpine
+    container_name: sveltekit_redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_network
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  redis_data:
