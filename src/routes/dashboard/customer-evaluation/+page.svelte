@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { supabase } from '$lib/supabaseClient';
   import { goto } from '$app/navigation';
   import type { User } from '@supabase/supabase-js';
@@ -34,6 +34,11 @@
   let currentStep = 0;
   let foundCount = 0;
   let searchResults = [];
+  let currentSessionId = '';
+  let progressInterval: number;
+
+  // Campaign state
+  let savedCampaigns = [];
 
   // Market vertical subcategories
   const subCategories = {
@@ -62,6 +67,77 @@
     formData.subCategory = '';
   }
 
+  async function getAuthHeader() {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session?.access_token ? `Bearer ${session.access_token}` : '';
+  }
+
+  async function loadSavedCampaigns() {
+    try {
+      const authHeader = await getAuthHeader();
+      if (!authHeader) return;
+
+      const response = await fetch('/api/customer-evaluation/campaigns', {
+        headers: {
+          'Authorization': authHeader,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        savedCampaigns = data.campaigns || [];
+      }
+    } catch (error) {
+      console.error('Failed to load campaigns:', error);
+    }
+  }
+
+  async function saveCampaign() {
+    if (!formData.campaignName.trim()) {
+      alert('Please enter a campaign name');
+      return;
+    }
+
+    try {
+      const authHeader = await getAuthHeader();
+      if (!authHeader) return;
+
+      const response = await fetch('/api/customer-evaluation/campaigns', {
+        method: 'POST',
+        headers: {
+          'Authorization': authHeader,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.campaignName,
+          searchParams: formData,
+          isTemplate: true
+        })
+      });
+
+      if (response.ok) {
+        alert('Campaign saved successfully!');
+        await loadSavedCampaigns();
+      } else {
+        const error = await response.json();
+        alert(`Failed to save campaign: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Failed to save campaign:', error);
+      alert('Failed to save campaign');
+    }
+  }
+
+  async function loadCampaign(campaignId: string) {
+    const campaign = savedCampaigns.find(c => c.id === campaignId);
+    if (campaign && campaign.search_params) {
+      formData = { ...formData, ...campaign.search_params };
+      formData.campaignName = campaign.name;
+      formData.campaignEnabled = true;
+    }
+  }
+
   function previewSearch() {
     const searchParams = {
       market: formData.marketVertical,
@@ -77,64 +153,101 @@
           `Batch Size: ${searchParams.batchSize}\n` +
           `Min Reviews: ${searchParams.minReviews}+\n` +
           `Min Rating: ${searchParams.minRating}+ stars\n\n` +
-          'This preview shows what would be sent to your n8n workflow.');
+          'This will trigger your n8n workflow for real data collection.');
   }
 
   async function startSearch() {
-    isSearching = true;
-    currentStep = 0;
-    foundCount = 0;
-    
-    // Simulate the progress steps
-    await simulateProgress();
-  }
-
-  async function simulateProgress() {
-    const steps = [
-      'Initializing search parameters',
-      'Connecting to Apify GMB scraper', 
-      'Scraping business data',
-      'Processing & quality scoring',
-      'Storing in Supabase',
-      'Triggering follow-up workflows'
-    ];
-    
-    for (let i = 0; i < steps.length; i++) {
-      currentStep = i;
-      
-      // Special handling for step 3 (scraping) to show counter
-      if (i === 2) {
-        let count = 0;
-        const targetCount = formData.batchSize;
-        
-        while (count < targetCount) {
-          await new Promise(resolve => setTimeout(resolve, 200));
-          count += Math.floor(Math.random() * 5) + 1;
-          if (count > targetCount) count = targetCount;
-          foundCount = count;
-        }
-        
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } else {
-        await new Promise(resolve => setTimeout(resolve, i === 0 ? 1000 : 2000));
-      }
+    if (!formData.marketVertical || !formData.city || !formData.state) {
+      alert('Please fill in all required fields: Market Vertical, City, and State');
+      return;
     }
-    
-    // Complete
-    currentStep = steps.length;
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    alert(`🎉 Search Complete!\n\n` +
-          `✅ Found ${foundCount} businesses\n` +
-          `✅ Data stored in Supabase\n` +
-          `✅ ClickUp tasks created\n` +
-          `✅ Agile CRM leads updated\n\n` +
-          'Check your dashboard for detailed results!');
-    
-    isSearching = false;
+
+    try {
+      isSearching = true;
+      currentStep = 0;
+      foundCount = 0;
+
+      const authHeader = await getAuthHeader();
+      if (!authHeader) {
+        alert('Authentication required');
+        return;
+      }
+
+      // Start the search via API
+      const response = await fetch('/api/customer-evaluation/search', {
+        method: 'POST',
+        headers: {
+          'Authorization': authHeader,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        currentSessionId = result.sessionId;
+        
+        // Save campaign if enabled
+        if (formData.campaignEnabled && formData.campaignName.trim()) {
+          await saveCampaign();
+        }
+
+        // Start polling for progress
+        startProgressPolling();
+      } else {
+        alert(`Search failed: ${result.error}`);
+        isSearching = false;
+      }
+
+    } catch (error) {
+      console.error('Search failed:', error);
+      alert('Search failed: Network error');
+      isSearching = false;
+    }
   }
 
-  onMount(() => {
+  async function startProgressPolling() {
+    progressInterval = setInterval(async () => {
+      try {
+        const authHeader = await getAuthHeader();
+        if (!authHeader) return;
+
+        const response = await fetch(`/api/customer-evaluation/progress?sessionId=${currentSessionId}`, {
+          headers: {
+            'Authorization': authHeader
+          }
+        });
+
+        if (response.ok) {
+          const progress = await response.json();
+          
+          currentStep = progress.currentStep;
+          foundCount = progress.foundCount || 0;
+
+          if (progress.isCompleted) {
+            clearInterval(progressInterval);
+            isSearching = false;
+            
+            alert(`🎉 Search Complete!\n\n` +
+                  `✅ Found ${progress.resultsCount} businesses\n` +
+                  `✅ Data stored in Supabase\n` +
+                  `✅ ClickUp tasks created\n` +
+                  `✅ Agile CRM leads updated\n\n` +
+                  'Check your dashboard for detailed results!');
+          } else if (progress.isFailed) {
+            clearInterval(progressInterval);
+            isSearching = false;
+            alert(`❌ Search Failed: ${progress.errorMessage}`);
+          }
+        }
+      } catch (error) {
+        console.error('Progress polling error:', error);
+      }
+    }, 2000); // Poll every 2 seconds
+  }
+
+  onMount(async () => {
     console.log('Customer Evaluation page onMount started');
     
     // Check if user is authenticated
@@ -151,9 +264,12 @@
       console.log('Session found, user:', session.user.email);
       user = session.user;
       isLoading = false;
+
+      // Load saved campaigns
+      await loadSavedCampaigns();
     };
     
-    checkAuth();
+    await checkAuth();
     
     // Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -169,6 +285,12 @@
     
     // Cleanup subscription on component destroy
     return () => subscription.unsubscribe();
+  });
+
+  onDestroy(() => {
+    if (progressInterval) {
+      clearInterval(progressInterval);
+    }
   });
 </script>
 
@@ -401,11 +523,11 @@
               </div>
               <div>
                 <label for="savedTemplate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Or Load Saved Template</label>
-                <select bind:value={formData.savedTemplate} id="savedTemplate" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100">
+                <select bind:value={formData.savedTemplate} on:change={() => formData.savedTemplate && loadCampaign(formData.savedTemplate)} id="savedTemplate" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-gray-100">
                   <option value="">Select a saved template</option>
-                  <option value="template1">Phoenix Contractors - Standard</option>
-                  <option value="template2">Arizona Pet Care - Comprehensive</option>
-                  <option value="template3">Southwest Restaurants - Quick</option>
+                  {#each savedCampaigns as campaign}
+                    <option value={campaign.id}>{campaign.name}</option>
+                  {/each}
                 </select>
               </div>
             </div>
