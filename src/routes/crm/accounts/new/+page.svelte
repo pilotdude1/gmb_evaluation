@@ -91,55 +91,68 @@
         .eq('id', user.id)
         .maybeSingle(); // Use maybeSingle to handle no rows gracefully
 
-      // If no profile exists, create one
+      // If no profile exists, create one using secure function
       if (!userProfile && (!profileError || profileError.code === 'PGRST116')) {
-        console.log('No user profile found, creating one...');
+        console.log('No user profile found, using secure setup...');
         
-        const { data: newProfile, error: createProfileError } = await supabase
-          .from('user_profiles')
-          .insert({
-            id: user.id
-          })
-          .select('current_tenant_id')
-          .single();
+        try {
+          console.log('Calling secure setup function for user:', user.id, user.email);
+          
+          // Use the secure setup function that bypasses RLS
+          const { data: setupResult, error: setupError } = await supabase.rpc(
+            'setup_user_tenant_secure',
+            {
+              user_id: user.id,
+              user_email: user.email || '',
+              tenant_name: null
+            }
+          );
 
-        if (createProfileError) {
-          console.error('Error creating user profile:', createProfileError);
-          error = `Unable to create user profile: ${createProfileError.message}`;
+          console.log('Setup function response:', { setupResult, setupError });
+
+          if (setupError) {
+            console.error('Setup function error:', setupError);
+            throw setupError;
+          }
+
+          if (!setupResult || !setupResult.success) {
+            console.error('Setup function failed:', setupResult);
+            throw new Error(setupResult?.error || 'Setup failed for unknown reason');
+          }
+
+          console.log('Secure setup completed:', setupResult);
+
+          // Use the tenant_id directly from the setup result
+          if (setupResult.tenant_id) {
+            userProfile = { current_tenant_id: setupResult.tenant_id };
+            console.log('Using tenant_id from setup result:', setupResult.tenant_id);
+          } else {
+            // Fallback: try to refresh profile
+            const { data: updatedProfile, error: refreshError } = await supabase
+              .from('user_profiles')
+              .select('current_tenant_id')
+              .eq('id', user.id)
+              .maybeSingle();
+              
+            if (refreshError) {
+              console.error('Error refreshing profile:', refreshError);
+              error = `Failed to refresh user profile: ${refreshError.message}`;
+              return;
+            }
+            
+            console.log('Updated profile after setup:', updatedProfile);
+            userProfile = updatedProfile;
+          }
+          
+        } catch (setupErr: any) {
+          console.error('Error in secure setup:', setupErr);
+          error = `Unable to set up user profile: ${setupErr.message}`;
           return;
         }
-
-        userProfile = newProfile;
       } else if (profileError && profileError.code !== 'PGRST116') {
         console.error('Error fetching user profile:', profileError);
         error = `Unable to fetch user profile: ${profileError.message}`;
         return;
-      }
-
-      if (!userProfile?.current_tenant_id) {
-        // Try to auto-setup tenant for new users
-        console.log('No tenant found, attempting auto-setup...');
-        const setupResult = await setupUserTenant(user.id, user.email || '');
-        
-        if (!setupResult.success) {
-          error = `Failed to set up your organization: ${setupResult.error?.message || 'Unknown error'}`;
-          return;
-        }
-        
-        // Refresh user profile after setup
-        const { data: updatedProfile } = await supabase
-          .from('user_profiles')
-          .select('current_tenant_id')
-          .eq('id', user.id)
-          .single();
-          
-        if (!updatedProfile?.current_tenant_id) {
-          error = 'Failed to complete organization setup. Please try again.';
-          return;
-        }
-        
-        // Update userProfile for continued processing
-        userProfile.current_tenant_id = updatedProfile.current_tenant_id;
       }
 
       // Final validation - ensure we have a tenant_id
