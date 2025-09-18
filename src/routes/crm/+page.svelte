@@ -50,33 +50,33 @@
 <div class="px-4 sm:px-6 lg:px-8">
   <!-- Page Header -->
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-900">CRM Dashboard</h1>
-    <p class="mt-2 text-gray-600">Overview of your sales pipeline and customer relationships</p>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">CRM Dashboard</h1>
+    <p class="mt-2 text-gray-600 dark:text-gray-300">Overview of your sales pipeline and customer relationships</p>
   </div>
 
   {#if loading}
     <!-- Loading State -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {#each Array(4) as _}
-        <div class="bg-white rounded-lg shadow p-6 animate-pulse">
-          <div class="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-          <div class="h-8 bg-gray-200 rounded w-1/2"></div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 animate-pulse">
+          <div class="h-4 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-2"></div>
+          <div class="h-8 bg-gray-200 dark:bg-gray-600 rounded w-1/2"></div>
         </div>
       {/each}
     </div>
   {:else if error}
     <!-- Error State -->
-    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-8">
       <div class="flex">
         <div class="flex-shrink-0">
           <span class="text-red-400">⚠️</span>
         </div>
         <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">Error</h3>
-          <p class="text-sm text-red-700 mt-1">{error}</p>
+          <h3 class="text-sm font-medium text-red-800 dark:text-red-300">Error</h3>
+          <p class="text-sm text-red-700 dark:text-red-400 mt-1">{error}</p>
           <button
             on:click={loadDashboardStats}
-            class="mt-2 bg-red-100 hover:bg-red-200 text-red-800 px-3 py-1 rounded text-sm font-medium transition-colors duration-200"
+            class="mt-2 bg-red-100 dark:bg-red-800 hover:bg-red-200 dark:hover:bg-red-700 text-red-800 dark:text-red-200 px-3 py-1 rounded text-sm font-medium transition-colors duration-200"
           >
             Try Again
           </button>
@@ -87,7 +87,7 @@
     <!-- Dashboard Stats -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <!-- Accounts Stats -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="flex items-center justify-center h-8 w-8 rounded-md bg-blue-500 text-white">
@@ -96,12 +96,12 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Total Accounts</dt>
-              <dd class="text-lg font-medium text-gray-900">{dashboardStats.accounts.total}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Accounts</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{dashboardStats.accounts.total}</dd>
             </dl>
           </div>
         </div>
-        <div class="mt-4 text-sm text-gray-600">
+        <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
           <div class="flex justify-between">
             <span>Prospects:</span>
             <span class="font-medium">{dashboardStats.accounts.prospects}</span>
@@ -114,7 +114,7 @@
       </div>
 
       <!-- Contacts Stats -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="flex items-center justify-center h-8 w-8 rounded-md bg-green-500 text-white">
@@ -123,12 +123,12 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Total Contacts</dt>
-              <dd class="text-lg font-medium text-gray-900">{dashboardStats.contacts.total}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Contacts</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{dashboardStats.contacts.total}</dd>
             </dl>
           </div>
         </div>
-        <div class="mt-4 text-sm text-gray-600">
+        <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
           <div class="flex justify-between">
             <span>New:</span>
             <span class="font-medium">{dashboardStats.contacts.new}</span>
@@ -141,7 +141,7 @@
       </div>
 
       <!-- Deals Stats -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="flex items-center justify-center h-8 w-8 rounded-md bg-purple-500 text-white">
@@ -150,12 +150,12 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Pipeline Value</dt>
-              <dd class="text-lg font-medium text-gray-900">{formatCurrency(dashboardStats.deals.pipelineValue)}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Pipeline Value</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{formatCurrency(dashboardStats.deals.pipelineValue)}</dd>
             </dl>
           </div>
         </div>
-        <div class="mt-4 text-sm text-gray-600">
+        <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
           <div class="flex justify-between">
             <span>Total Deals:</span>
             <span class="font-medium">{dashboardStats.deals.total}</span>
@@ -168,7 +168,7 @@
       </div>
 
       <!-- Activities Stats -->
-      <div class="bg-white rounded-lg shadow p-6">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center">
           <div class="flex-shrink-0">
             <div class="flex items-center justify-center h-8 w-8 rounded-md bg-orange-500 text-white">
@@ -177,12 +177,12 @@
           </div>
           <div class="ml-5 w-0 flex-1">
             <dl>
-              <dt class="text-sm font-medium text-gray-500 truncate">Activities This Week</dt>
-              <dd class="text-lg font-medium text-gray-900">{dashboardStats.activities.thisWeek}</dd>
+              <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Activities This Week</dt>
+              <dd class="text-lg font-medium text-gray-900 dark:text-white">{dashboardStats.activities.thisWeek}</dd>
             </dl>
           </div>
         </div>
-        <div class="mt-4 text-sm text-gray-600">
+        <div class="mt-4 text-sm text-gray-600 dark:text-gray-300">
           <div class="flex justify-between">
             <span>Total:</span>
             <span class="font-medium">{dashboardStats.activities.total}</span>
@@ -192,8 +192,8 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-white rounded-lg shadow p-6 mb-8">
-      <h2 class="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-8">
+      <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Quick Actions</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <a
           href="/crm/accounts/new"
@@ -221,16 +221,16 @@
 
     <!-- Recent Activity (if we have activity data) -->
     {#if dashboardStats.activities.byType}
-      <div class="bg-white rounded-lg shadow p-6">
-        <h2 class="text-lg font-medium text-gray-900 mb-4">Activity Breakdown</h2>
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <h2 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Activity Breakdown</h2>
         <div class="space-y-3">
           {#each Object.entries(dashboardStats.activities.byType) as [type, count]}
             <div class="flex items-center justify-between">
               <div class="flex items-center">
                 <div class="flex-shrink-0 w-3 h-3 rounded-full bg-blue-500 mr-3"></div>
-                <span class="text-sm font-medium text-gray-900 capitalize">{type.replace('_', ' ')}</span>
+                <span class="text-sm font-medium text-gray-900 dark:text-white capitalize">{type.replace('_', ' ')}</span>
               </div>
-              <span class="text-sm text-gray-500">{count}</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400">{count}</span>
             </div>
           {/each}
         </div>
