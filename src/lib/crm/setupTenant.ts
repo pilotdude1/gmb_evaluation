@@ -48,9 +48,7 @@ export async function setupUserTenant(userId: string, email: string) {
       .from('user_profiles')
       .upsert({ 
         id: userId, 
-        current_tenant_id: tenant.id,
-        email: email,
-        updated_at: new Date().toISOString()
+        current_tenant_id: tenant.id
       }, {
         onConflict: 'id'
       });

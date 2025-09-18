@@ -98,10 +98,7 @@
         const { data: newProfile, error: createProfileError } = await supabase
           .from('user_profiles')
           .insert({
-            id: user.id,
-            email: user.email,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString()
+            id: user.id
           })
           .select('current_tenant_id')
           .single();
