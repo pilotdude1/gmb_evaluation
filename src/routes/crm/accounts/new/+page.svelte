@@ -1,7 +1,8 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
   import { crmClient, type CRMAccountInsert } from '$lib/crm/crmClient';
-  import { authUtils } from '$lib/supabaseClient';
+  import { authUtils, supabase } from '$lib/supabaseClient';
+  import { setupUserTenant, checkUserTenantSetup } from '$lib/crm/setupTenant';
   
   let loading = false;
   let error: string | null = null;
@@ -83,12 +84,77 @@
         return;
       }
 
-      // Add required fields
+      // Get user's tenant_id from their profile
+      const { data: userProfile, error: profileError } = await supabase
+        .from('user_profiles')
+        .select('current_tenant_id')
+        .eq('id', user.id)
+        .single();
+
+      if (profileError) {
+        console.error('Error fetching user profile:', profileError);
+        error = `Unable to fetch user profile: ${profileError.message}`;
+        return;
+      }
+
+      if (!userProfile?.current_tenant_id) {
+        // Try to auto-setup tenant for new users
+        console.log('No tenant found, attempting auto-setup...');
+        const setupResult = await setupUserTenant(user.id, user.email || '');
+        
+        if (!setupResult.success) {
+          error = `Failed to set up your organization: ${setupResult.error?.message || 'Unknown error'}`;
+          return;
+        }
+        
+        // Refresh user profile after setup
+        const { data: updatedProfile } = await supabase
+          .from('user_profiles')
+          .select('current_tenant_id')
+          .eq('id', user.id)
+          .single();
+          
+        if (!updatedProfile?.current_tenant_id) {
+          error = 'Failed to complete organization setup. Please try again.';
+          return;
+        }
+        
+        // Update userProfile for continued processing
+        userProfile.current_tenant_id = updatedProfile.current_tenant_id;
+      }
+
+      // Check if user exists in tenant_users table
+      const { data: tenantUser, error: tenantUserError } = await supabase
+        .from('tenant_users')
+        .select('role, permissions')
+        .eq('tenant_id', userProfile.current_tenant_id)
+        .eq('user_id', user.id)
+        .single();
+
+      if (tenantUserError) {
+        console.error('Error fetching tenant user:', tenantUserError);
+        error = `Unable to verify tenant membership: ${tenantUserError.message}`;
+        return;
+      }
+
+      if (!tenantUser) {
+        error = 'You are not a member of any organization. Please contact support.';
+        return;
+      }
+
+      // Check permissions
+      const hasPermission = ['owner', 'admin', 'manager'].includes(tenantUser.role);
+      if (!hasPermission) {
+        error = `Insufficient permissions. Your role '${tenantUser.role}' cannot create accounts. Contact an administrator.`;
+        return;
+      }
+
+      // Add required fields including tenant_id
       const accountData: CRMAccountInsert = {
         ...formData,
         name: formData.name!,
         created_by: user.id,
-        // Note: tenant_id should be set by RLS/database trigger
+        tenant_id: userProfile.current_tenant_id,
       };
 
       const { data, error: createError } = await crmClient.createAccount(accountData);
