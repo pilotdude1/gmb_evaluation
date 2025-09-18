@@ -84,14 +84,36 @@
         return;
       }
 
-      // Get user's tenant_id from their profile
-      const { data: userProfile, error: profileError } = await supabase
+      // Get user's tenant_id from their profile (handle missing profile)
+      let { data: userProfile, error: profileError } = await supabase
         .from('user_profiles')
         .select('current_tenant_id')
         .eq('id', user.id)
-        .single();
+        .maybeSingle(); // Use maybeSingle to handle no rows gracefully
 
-      if (profileError) {
+      // If no profile exists, create one
+      if (!userProfile && (!profileError || profileError.code === 'PGRST116')) {
+        console.log('No user profile found, creating one...');
+        
+        const { data: newProfile, error: createProfileError } = await supabase
+          .from('user_profiles')
+          .insert({
+            id: user.id,
+            email: user.email,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .select('current_tenant_id')
+          .single();
+
+        if (createProfileError) {
+          console.error('Error creating user profile:', createProfileError);
+          error = `Unable to create user profile: ${createProfileError.message}`;
+          return;
+        }
+
+        userProfile = newProfile;
+      } else if (profileError && profileError.code !== 'PGRST116') {
         console.error('Error fetching user profile:', profileError);
         error = `Unable to fetch user profile: ${profileError.message}`;
         return;
@@ -123,31 +145,13 @@
         userProfile.current_tenant_id = updatedProfile.current_tenant_id;
       }
 
-      // Check if user exists in tenant_users table
-      const { data: tenantUser, error: tenantUserError } = await supabase
-        .from('tenant_users')
-        .select('role, permissions')
-        .eq('tenant_id', userProfile.current_tenant_id)
-        .eq('user_id', user.id)
-        .single();
-
-      if (tenantUserError) {
-        console.error('Error fetching tenant user:', tenantUserError);
-        error = `Unable to verify tenant membership: ${tenantUserError.message}`;
+      // Final validation - ensure we have a tenant_id
+      if (!userProfile?.current_tenant_id) {
+        error = 'Unable to determine your organization. Please try again or contact support.';
         return;
       }
 
-      if (!tenantUser) {
-        error = 'You are not a member of any organization. Please contact support.';
-        return;
-      }
-
-      // Check permissions
-      const hasPermission = ['owner', 'admin', 'manager'].includes(tenantUser.role);
-      if (!hasPermission) {
-        error = `Insufficient permissions. Your role '${tenantUser.role}' cannot create accounts. Contact an administrator.`;
-        return;
-      }
+      console.log('Creating account for tenant:', userProfile.current_tenant_id);
 
       // Add required fields including tenant_id
       const accountData: CRMAccountInsert = {

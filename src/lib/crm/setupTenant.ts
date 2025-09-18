@@ -8,12 +8,12 @@ export async function setupUserTenant(userId: string, email: string) {
   try {
     console.log('Setting up tenant for user:', userId, email);
 
-    // Check if user already has a tenant
+    // Check if user already has a tenant (use maybeSingle to handle missing profile)
     const { data: existingProfile } = await supabase
       .from('user_profiles')
       .select('current_tenant_id')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     if (existingProfile?.current_tenant_id) {
       console.log('User already has tenant:', existingProfile.current_tenant_id);
@@ -43,11 +43,17 @@ export async function setupUserTenant(userId: string, email: string) {
 
     console.log('Created tenant:', tenant.id);
 
-    // Update user profile with tenant
+    // Update user profile with tenant (or create if doesn't exist)
     const { error: profileError } = await supabase
       .from('user_profiles')
-      .update({ current_tenant_id: tenant.id })
-      .eq('id', userId);
+      .upsert({ 
+        id: userId, 
+        current_tenant_id: tenant.id,
+        email: email,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'id'
+      });
 
     if (profileError) {
       console.error('Error updating user profile:', profileError);
@@ -95,7 +101,7 @@ export async function checkUserTenantSetup(userId: string) {
       .from('user_profiles')
       .select('current_tenant_id')
       .eq('id', userId)
-      .single();
+      .maybeSingle();
 
     if (!profile?.current_tenant_id) {
       return { hasSetup: false, reason: 'No tenant assigned' };
@@ -107,7 +113,7 @@ export async function checkUserTenantSetup(userId: string) {
       .select('role, permissions')
       .eq('tenant_id', profile.current_tenant_id)
       .eq('user_id', userId)
-      .single();
+      .maybeSingle();
 
     if (!tenantUser) {
       return { hasSetup: false, reason: 'Not a tenant member' };
