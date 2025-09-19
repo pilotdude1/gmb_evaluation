@@ -1,0 +1,422 @@
+<testsuites id="" name="" tests="20" failures="0" skipped="0" errors="0" time="52.097942">
+<testsuite name="crm-api-debug.spec.ts" timestamp="2025-09-18T20:53:55.472Z" hostname="chromium" tests="4" failures="0" skipped="0" time="13.551" errors="0">
+<testcase name="CRM API &amp; Database Debug Tests › Debug user profile and tenant setup via console" classname="crm-api-debug.spec.ts" time="5.146">
+<system-out>
+<![CDATA[=== CRM API DEBUGGING SESSION ===
+
+=== ENVIRONMENT ===
+{
+  "supabaseUrl": "Not set",
+  "hasAnonKey": false,
+  "nodeEnv": "Not set"
+}
+
+=== AUTHENTICATION ===
+{
+  "hasSession": false,
+  "hasUser": false,
+  "userId": null,
+  "userEmail": null
+}
+
+=== DATABASE ===
+{
+  "tenantsCount": 0
+}
+
+=== ERRORS ===
+
+=== RECOMMENDATIONS ===
+❌ User not authenticated - need to log in first
+✅ No critical errors detected
+
+=================================
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test manual tenant and profile setup" classname="crm-api-debug.spec.ts" time="4.519">
+<system-out>
+<![CDATA[=== MANUAL SETUP TEST ===
+
+=== SETUP TEST RESULTS ===
+❌ No authenticated user
+
+=== FINAL STATE ===
+{}
+
+=== OVERALL SUCCESS: ❌ ===
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test direct account creation without UI" classname="crm-api-debug.spec.ts" time="3.013">
+<system-out>
+<![CDATA[=== DIRECT ACCOUNT CREATION TEST ===
+
+=== PREPARATION STEPS ===
+❌ No authenticated user
+
+=== ACCOUNT CREATION ATTEMPT ===
+{}
+
+=== FINAL RESULT: ❌ FAILED ===
+]]>
+</system-out>
+</testcase>
+<testcase name="Generate comprehensive API debug report" classname="crm-api-debug.spec.ts" time="0.873">
+<system-out>
+<![CDATA[
+
+
+
+============================================================
+         COMPREHENSIVE CRM DEBUG REPORT
+============================================================
+📋 All debug information has been logged above
+📸 Screenshots saved to test-results/ directory
+🔍 Key areas to investigate:
+   1. RLS policies on user_profiles table
+   2. Database triggers for auto-profile creation
+   3. Tenant setup and user membership
+   4. Authentication and session state
+============================================================
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="crm-api-debug.spec.ts" timestamp="2025-09-18T20:53:55.472Z" hostname="firefox" tests="4" failures="0" skipped="0" time="28.912" errors="0">
+<testcase name="CRM API &amp; Database Debug Tests › Debug user profile and tenant setup via console" classname="crm-api-debug.spec.ts" time="10.942">
+<system-out>
+<![CDATA[=== CRM API DEBUGGING SESSION ===
+
+=== ENVIRONMENT ===
+{
+  "supabaseUrl": "Not set",
+  "hasAnonKey": false,
+  "nodeEnv": "Not set"
+}
+
+=== AUTHENTICATION ===
+{
+  "hasSession": false,
+  "hasUser": false,
+  "userId": null,
+  "userEmail": null
+}
+
+=== DATABASE ===
+{
+  "tenantsCount": 0
+}
+
+=== ERRORS ===
+
+=== RECOMMENDATIONS ===
+❌ User not authenticated - need to log in first
+✅ No critical errors detected
+
+=================================
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test manual tenant and profile setup" classname="crm-api-debug.spec.ts" time="8.417">
+<system-out>
+<![CDATA[=== MANUAL SETUP TEST ===
+
+=== SETUP TEST RESULTS ===
+❌ No authenticated user
+
+=== FINAL STATE ===
+{}
+
+=== OVERALL SUCCESS: ❌ ===
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test direct account creation without UI" classname="crm-api-debug.spec.ts" time="4.992">
+<system-out>
+<![CDATA[=== DIRECT ACCOUNT CREATION TEST ===
+
+=== PREPARATION STEPS ===
+❌ No authenticated user
+
+=== ACCOUNT CREATION ATTEMPT ===
+{}
+
+=== FINAL RESULT: ❌ FAILED ===
+]]>
+</system-out>
+</testcase>
+<testcase name="Generate comprehensive API debug report" classname="crm-api-debug.spec.ts" time="4.561">
+<system-out>
+<![CDATA[
+
+
+
+============================================================
+         COMPREHENSIVE CRM DEBUG REPORT
+============================================================
+📋 All debug information has been logged above
+📸 Screenshots saved to test-results/ directory
+🔍 Key areas to investigate:
+   1. RLS policies on user_profiles table
+   2. Database triggers for auto-profile creation
+   3. Tenant setup and user membership
+   4. Authentication and session state
+============================================================
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="crm-api-debug.spec.ts" timestamp="2025-09-18T20:53:55.472Z" hostname="webkit" tests="4" failures="0" skipped="0" time="12.173" errors="0">
+<testcase name="CRM API &amp; Database Debug Tests › Debug user profile and tenant setup via console" classname="crm-api-debug.spec.ts" time="4.783">
+<system-out>
+<![CDATA[=== CRM API DEBUGGING SESSION ===
+
+=== ENVIRONMENT ===
+{
+  "supabaseUrl": "Not set",
+  "hasAnonKey": false,
+  "nodeEnv": "Not set"
+}
+
+=== AUTHENTICATION ===
+{
+  "hasSession": false,
+  "hasUser": false,
+  "userId": null,
+  "userEmail": null
+}
+
+=== DATABASE ===
+{
+  "tenantsCount": 0
+}
+
+=== ERRORS ===
+
+=== RECOMMENDATIONS ===
+❌ User not authenticated - need to log in first
+✅ No critical errors detected
+
+=================================
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test manual tenant and profile setup" classname="crm-api-debug.spec.ts" time="3.497">
+<system-out>
+<![CDATA[=== MANUAL SETUP TEST ===
+
+=== SETUP TEST RESULTS ===
+❌ No authenticated user
+
+=== FINAL STATE ===
+{}
+
+=== OVERALL SUCCESS: ❌ ===
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test direct account creation without UI" classname="crm-api-debug.spec.ts" time="2.964">
+<system-out>
+<![CDATA[=== DIRECT ACCOUNT CREATION TEST ===
+
+=== PREPARATION STEPS ===
+❌ No authenticated user
+
+=== ACCOUNT CREATION ATTEMPT ===
+{}
+
+=== FINAL RESULT: ❌ FAILED ===
+]]>
+</system-out>
+</testcase>
+<testcase name="Generate comprehensive API debug report" classname="crm-api-debug.spec.ts" time="0.929">
+<system-out>
+<![CDATA[
+
+
+
+============================================================
+         COMPREHENSIVE CRM DEBUG REPORT
+============================================================
+📋 All debug information has been logged above
+📸 Screenshots saved to test-results/ directory
+🔍 Key areas to investigate:
+   1. RLS policies on user_profiles table
+   2. Database triggers for auto-profile creation
+   3. Tenant setup and user membership
+   4. Authentication and session state
+============================================================
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="crm-api-debug.spec.ts" timestamp="2025-09-18T20:53:55.472Z" hostname="mobile-chrome" tests="4" failures="0" skipped="0" time="12.158" errors="0">
+<testcase name="CRM API &amp; Database Debug Tests › Debug user profile and tenant setup via console" classname="crm-api-debug.spec.ts" time="4.281">
+<system-out>
+<![CDATA[=== CRM API DEBUGGING SESSION ===
+
+=== ENVIRONMENT ===
+{
+  "supabaseUrl": "Not set",
+  "hasAnonKey": false,
+  "nodeEnv": "Not set"
+}
+
+=== AUTHENTICATION ===
+{
+  "hasSession": false,
+  "hasUser": false,
+  "userId": null,
+  "userEmail": null
+}
+
+=== DATABASE ===
+{
+  "tenantsCount": 0
+}
+
+=== ERRORS ===
+
+=== RECOMMENDATIONS ===
+❌ User not authenticated - need to log in first
+✅ No critical errors detected
+
+=================================
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test manual tenant and profile setup" classname="crm-api-debug.spec.ts" time="3.295">
+<system-out>
+<![CDATA[=== MANUAL SETUP TEST ===
+
+=== SETUP TEST RESULTS ===
+❌ No authenticated user
+
+=== FINAL STATE ===
+{}
+
+=== OVERALL SUCCESS: ❌ ===
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test direct account creation without UI" classname="crm-api-debug.spec.ts" time="2.987">
+<system-out>
+<![CDATA[=== DIRECT ACCOUNT CREATION TEST ===
+
+=== PREPARATION STEPS ===
+❌ No authenticated user
+
+=== ACCOUNT CREATION ATTEMPT ===
+{}
+
+=== FINAL RESULT: ❌ FAILED ===
+]]>
+</system-out>
+</testcase>
+<testcase name="Generate comprehensive API debug report" classname="crm-api-debug.spec.ts" time="1.595">
+<system-out>
+<![CDATA[
+
+
+
+============================================================
+         COMPREHENSIVE CRM DEBUG REPORT
+============================================================
+📋 All debug information has been logged above
+📸 Screenshots saved to test-results/ directory
+🔍 Key areas to investigate:
+   1. RLS policies on user_profiles table
+   2. Database triggers for auto-profile creation
+   3. Tenant setup and user membership
+   4. Authentication and session state
+============================================================
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="crm-api-debug.spec.ts" timestamp="2025-09-18T20:53:55.472Z" hostname="mobile-safari" tests="4" failures="0" skipped="0" time="11.585" errors="0">
+<testcase name="CRM API &amp; Database Debug Tests › Debug user profile and tenant setup via console" classname="crm-api-debug.spec.ts" time="4.234">
+<system-out>
+<![CDATA[=== CRM API DEBUGGING SESSION ===
+
+=== ENVIRONMENT ===
+{
+  "supabaseUrl": "Not set",
+  "hasAnonKey": false,
+  "nodeEnv": "Not set"
+}
+
+=== AUTHENTICATION ===
+{
+  "hasSession": false,
+  "hasUser": false,
+  "userId": null,
+  "userEmail": null
+}
+
+=== DATABASE ===
+{
+  "tenantsCount": 0
+}
+
+=== ERRORS ===
+
+=== RECOMMENDATIONS ===
+❌ User not authenticated - need to log in first
+✅ No critical errors detected
+
+=================================
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test manual tenant and profile setup" classname="crm-api-debug.spec.ts" time="3.76">
+<system-out>
+<![CDATA[=== MANUAL SETUP TEST ===
+
+=== SETUP TEST RESULTS ===
+❌ No authenticated user
+
+=== FINAL STATE ===
+{}
+
+=== OVERALL SUCCESS: ❌ ===
+]]>
+</system-out>
+</testcase>
+<testcase name="CRM API &amp; Database Debug Tests › Test direct account creation without UI" classname="crm-api-debug.spec.ts" time="2.557">
+<system-out>
+<![CDATA[=== DIRECT ACCOUNT CREATION TEST ===
+
+=== PREPARATION STEPS ===
+❌ No authenticated user
+
+=== ACCOUNT CREATION ATTEMPT ===
+{}
+
+=== FINAL RESULT: ❌ FAILED ===
+]]>
+</system-out>
+</testcase>
+<testcase name="Generate comprehensive API debug report" classname="crm-api-debug.spec.ts" time="1.034">
+<system-out>
+<![CDATA[
+
+
+
+============================================================
+         COMPREHENSIVE CRM DEBUG REPORT
+============================================================
+📋 All debug information has been logged above
+📸 Screenshots saved to test-results/ directory
+🔍 Key areas to investigate:
+   1. RLS policies on user_profiles table
+   2. Database triggers for auto-profile creation
+   3. Tenant setup and user membership
+   4. Authentication and session state
+============================================================
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

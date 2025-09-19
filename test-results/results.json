@@ -1,0 +1,1398 @@
+{
+  "config": {
+    "configFile": "C:\\Users\\local_28d\\OneDrive\\Documents\\GitHub\\gmb_evaluation\\playwright.config.ts",
+    "rootDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/tests",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 2
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      },
+      {
+        "outputDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/test-results",
+        "repeatEach": 1,
+        "retries": 1,
+        "metadata": {
+          "actualWorkers": 2
+        },
+        "id": "mobile-safari",
+        "name": "mobile-safari",
+        "testDir": "C:/Users/local_28d/OneDrive/Documents/GitHub/gmb_evaluation/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 60000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.2",
+    "workers": 2,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "crm-api-debug.spec.ts",
+      "file": "crm-api-debug.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Generate comprehensive API debug report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 873,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n\n\n\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "         COMPREHENSIVE CRM DEBUG REPORT\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "📋 All debug information has been logged above\n"
+                    },
+                    {
+                      "text": "📸 Screenshots saved to test-results/ directory\n"
+                    },
+                    {
+                      "text": "🔍 Key areas to investigate:\n"
+                    },
+                    {
+                      "text": "   1. RLS policies on user_profiles table\n"
+                    },
+                    {
+                      "text": "   2. Database triggers for auto-profile creation\n"
+                    },
+                    {
+                      "text": "   3. Tenant setup and user membership\n"
+                    },
+                    {
+                      "text": "   4. Authentication and session state\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-09-18T20:54:03.100Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df85875f629495e09672-90d46f981d8585a79b91",
+          "file": "crm-api-debug.spec.ts",
+          "line": 386,
+          "column": 1
+        },
+        {
+          "title": "Generate comprehensive API debug report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "firefox",
+              "projectName": "firefox",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4561,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n\n\n\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "         COMPREHENSIVE CRM DEBUG REPORT\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "📋 All debug information has been logged above\n"
+                    },
+                    {
+                      "text": "📸 Screenshots saved to test-results/ directory\n"
+                    },
+                    {
+                      "text": "🔍 Key areas to investigate:\n"
+                    },
+                    {
+                      "text": "   1. RLS policies on user_profiles table\n"
+                    },
+                    {
+                      "text": "   2. Database triggers for auto-profile creation\n"
+                    },
+                    {
+                      "text": "   3. Tenant setup and user membership\n"
+                    },
+                    {
+                      "text": "   4. Authentication and session state\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-09-18T20:54:18.081Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df85875f629495e09672-25da03a9df06dd2b4668",
+          "file": "crm-api-debug.spec.ts",
+          "line": 386,
+          "column": 1
+        },
+        {
+          "title": "Generate comprehensive API debug report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 929,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n\n\n\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "         COMPREHENSIVE CRM DEBUG REPORT\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "📋 All debug information has been logged above\n"
+                    },
+                    {
+                      "text": "📸 Screenshots saved to test-results/ directory\n"
+                    },
+                    {
+                      "text": "🔍 Key areas to investigate:\n"
+                    },
+                    {
+                      "text": "   1. RLS policies on user_profiles table\n"
+                    },
+                    {
+                      "text": "   2. Database triggers for auto-profile creation\n"
+                    },
+                    {
+                      "text": "   3. Tenant setup and user membership\n"
+                    },
+                    {
+                      "text": "   4. Authentication and session state\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-09-18T20:54:29.606Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df85875f629495e09672-f9025b92509697023c81",
+          "file": "crm-api-debug.spec.ts",
+          "line": 386,
+          "column": 1
+        },
+        {
+          "title": "Generate comprehensive API debug report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-chrome",
+              "projectName": "mobile-chrome",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1595,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n\n\n\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "         COMPREHENSIVE CRM DEBUG REPORT\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "📋 All debug information has been logged above\n"
+                    },
+                    {
+                      "text": "📸 Screenshots saved to test-results/ directory\n"
+                    },
+                    {
+                      "text": "🔍 Key areas to investigate:\n"
+                    },
+                    {
+                      "text": "   1. RLS policies on user_profiles table\n"
+                    },
+                    {
+                      "text": "   2. Database triggers for auto-profile creation\n"
+                    },
+                    {
+                      "text": "   3. Tenant setup and user membership\n"
+                    },
+                    {
+                      "text": "   4. Authentication and session state\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-09-18T20:54:37.550Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df85875f629495e09672-c18402a1ab669dbf3701",
+          "file": "crm-api-debug.spec.ts",
+          "line": 386,
+          "column": 1
+        },
+        {
+          "title": "Generate comprehensive API debug report",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "mobile-safari",
+              "projectName": "mobile-safari",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1034,
+                  "errors": [],
+                  "stdout": [
+                    {
+                      "text": "\n\n\n\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "         COMPREHENSIVE CRM DEBUG REPORT\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    },
+                    {
+                      "text": "📋 All debug information has been logged above\n"
+                    },
+                    {
+                      "text": "📸 Screenshots saved to test-results/ directory\n"
+                    },
+                    {
+                      "text": "🔍 Key areas to investigate:\n"
+                    },
+                    {
+                      "text": "   1. RLS policies on user_profiles table\n"
+                    },
+                    {
+                      "text": "   2. Database triggers for auto-profile creation\n"
+                    },
+                    {
+                      "text": "   3. Tenant setup and user membership\n"
+                    },
+                    {
+                      "text": "   4. Authentication and session state\n"
+                    },
+                    {
+                      "text": "============================================================\n"
+                    }
+                  ],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2025-09-18T20:54:45.176Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df85875f629495e09672-6bb3edb9df3c9ee7b794",
+          "file": "crm-api-debug.spec.ts",
+          "line": 386,
+          "column": 1
+        }
+      ],
+      "suites": [
+        {
+          "title": "CRM API & Database Debug Tests",
+          "file": "crm-api-debug.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Debug user profile and tenant setup via console",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5146,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== CRM API DEBUGGING SESSION ===\n"
+                        },
+                        {
+                          "text": "\n=== ENVIRONMENT ===\n"
+                        },
+                        {
+                          "text": "{\n  \"supabaseUrl\": \"Not set\",\n  \"hasAnonKey\": false,\n  \"nodeEnv\": \"Not set\"\n}\n"
+                        },
+                        {
+                          "text": "\n=== AUTHENTICATION ===\n"
+                        },
+                        {
+                          "text": "{\n  \"hasSession\": false,\n  \"hasUser\": false,\n  \"userId\": null,\n  \"userEmail\": null\n}\n"
+                        },
+                        {
+                          "text": "\n=== DATABASE ===\n"
+                        },
+                        {
+                          "text": "{\n  \"tenantsCount\": 0\n}\n"
+                        },
+                        {
+                          "text": "\n=== ERRORS ===\n"
+                        },
+                        {
+                          "text": "\n=== RECOMMENDATIONS ===\n"
+                        },
+                        {
+                          "text": "❌ User not authenticated - need to log in first\n"
+                        },
+                        {
+                          "text": "✅ No critical errors detected\n"
+                        },
+                        {
+                          "text": "\n=================================\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:53:56.369Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-5007cd0a8115b499f404",
+              "file": "crm-api-debug.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "Test manual tenant and profile setup",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4519,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== MANUAL SETUP TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== SETUP TEST RESULTS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== FINAL STATE ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== OVERALL SUCCESS: ❌ ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:53:56.367Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-8b52c42059e57b7b42ac",
+              "file": "crm-api-debug.spec.ts",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "Test direct account creation without UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3013,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== DIRECT ACCOUNT CREATION TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== PREPARATION STEPS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== ACCOUNT CREATION ATTEMPT ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== FINAL RESULT: ❌ FAILED ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:02.463Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-6879e788ad7008348fdf",
+              "file": "crm-api-debug.spec.ts",
+              "line": 276,
+              "column": 3
+            },
+            {
+              "title": "Debug user profile and tenant setup via console",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 10942,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== CRM API DEBUGGING SESSION ===\n"
+                        },
+                        {
+                          "text": "\n=== ENVIRONMENT ===\n"
+                        },
+                        {
+                          "text": "{\n  \"supabaseUrl\": \"Not set\",\n  \"hasAnonKey\": false,\n  \"nodeEnv\": \"Not set\"\n}\n"
+                        },
+                        {
+                          "text": "\n=== AUTHENTICATION ===\n"
+                        },
+                        {
+                          "text": "{\n  \"hasSession\": false,\n  \"hasUser\": false,\n  \"userId\": null,\n  \"userEmail\": null\n}\n"
+                        },
+                        {
+                          "text": "\n=== DATABASE ===\n"
+                        },
+                        {
+                          "text": "{\n  \"tenantsCount\": 0\n}\n"
+                        },
+                        {
+                          "text": "\n=== ERRORS ===\n"
+                        },
+                        {
+                          "text": "\n=== RECOMMENDATIONS ===\n"
+                        },
+                        {
+                          "text": "❌ User not authenticated - need to log in first\n"
+                        },
+                        {
+                          "text": "✅ No critical errors detected\n"
+                        },
+                        {
+                          "text": "\n=================================\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:05.583Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-4b38ad045aa7de5a4f54",
+              "file": "crm-api-debug.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "Test manual tenant and profile setup",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 8417,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== MANUAL SETUP TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== SETUP TEST RESULTS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== FINAL STATE ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== OVERALL SUCCESS: ❌ ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:07.169Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-0fa7476a392a277eb64a",
+              "file": "crm-api-debug.spec.ts",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "Test direct account creation without UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4992,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== DIRECT ACCOUNT CREATION TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== PREPARATION STEPS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== ACCOUNT CREATION ATTEMPT ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== FINAL RESULT: ❌ FAILED ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:17.030Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-cd1f2b4e893097aa8184",
+              "file": "crm-api-debug.spec.ts",
+              "line": 276,
+              "column": 3
+            },
+            {
+              "title": "Debug user profile and tenant setup via console",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4783,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== CRM API DEBUGGING SESSION ===\n"
+                        },
+                        {
+                          "text": "\n=== ENVIRONMENT ===\n"
+                        },
+                        {
+                          "text": "{\n  \"supabaseUrl\": \"Not set\",\n  \"hasAnonKey\": false,\n  \"nodeEnv\": \"Not set\"\n}\n"
+                        },
+                        {
+                          "text": "\n=== AUTHENTICATION ===\n"
+                        },
+                        {
+                          "text": "{\n  \"hasSession\": false,\n  \"hasUser\": false,\n  \"userId\": null,\n  \"userEmail\": null\n}\n"
+                        },
+                        {
+                          "text": "\n=== DATABASE ===\n"
+                        },
+                        {
+                          "text": "{\n  \"tenantsCount\": 0\n}\n"
+                        },
+                        {
+                          "text": "\n=== ERRORS ===\n"
+                        },
+                        {
+                          "text": "\n=== RECOMMENDATIONS ===\n"
+                        },
+                        {
+                          "text": "❌ User not authenticated - need to log in first\n"
+                        },
+                        {
+                          "text": "✅ No critical errors detected\n"
+                        },
+                        {
+                          "text": "\n=================================\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:24.577Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-30f8033f1d8cffc8a0e9",
+              "file": "crm-api-debug.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "Test manual tenant and profile setup",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3497,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== MANUAL SETUP TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== SETUP TEST RESULTS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== FINAL STATE ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== OVERALL SUCCESS: ❌ ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:25.129Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-6672481fc708f78b3e70",
+              "file": "crm-api-debug.spec.ts",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "Test direct account creation without UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 2964,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== DIRECT ACCOUNT CREATION TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== PREPARATION STEPS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== ACCOUNT CREATION ATTEMPT ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== FINAL RESULT: ❌ FAILED ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:28.798Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-c1a72bf3266c419d7a32",
+              "file": "crm-api-debug.spec.ts",
+              "line": 276,
+              "column": 3
+            },
+            {
+              "title": "Debug user profile and tenant setup via console",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 4281,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== CRM API DEBUGGING SESSION ===\n"
+                        },
+                        {
+                          "text": "\n=== ENVIRONMENT ===\n"
+                        },
+                        {
+                          "text": "{\n  \"supabaseUrl\": \"Not set\",\n  \"hasAnonKey\": false,\n  \"nodeEnv\": \"Not set\"\n}\n"
+                        },
+                        {
+                          "text": "\n=== AUTHENTICATION ===\n"
+                        },
+                        {
+                          "text": "{\n  \"hasSession\": false,\n  \"hasUser\": false,\n  \"userId\": null,\n  \"userEmail\": null\n}\n"
+                        },
+                        {
+                          "text": "\n=== DATABASE ===\n"
+                        },
+                        {
+                          "text": "{\n  \"tenantsCount\": 0\n}\n"
+                        },
+                        {
+                          "text": "\n=== ERRORS ===\n"
+                        },
+                        {
+                          "text": "\n=== RECOMMENDATIONS ===\n"
+                        },
+                        {
+                          "text": "❌ User not authenticated - need to log in first\n"
+                        },
+                        {
+                          "text": "✅ No critical errors detected\n"
+                        },
+                        {
+                          "text": "\n=================================\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:31.435Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-69b3c984c27475127179",
+              "file": "crm-api-debug.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "Test manual tenant and profile setup",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 3295,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== MANUAL SETUP TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== SETUP TEST RESULTS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== FINAL STATE ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== OVERALL SUCCESS: ❌ ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:33.729Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-c4f9fac3cc47e19ef9a6",
+              "file": "crm-api-debug.spec.ts",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "Test direct account creation without UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2987,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== DIRECT ACCOUNT CREATION TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== PREPARATION STEPS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== ACCOUNT CREATION ATTEMPT ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== FINAL RESULT: ❌ FAILED ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:36.395Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-6e2491ec01ebd3af901d",
+              "file": "crm-api-debug.spec.ts",
+              "line": 276,
+              "column": 3
+            },
+            {
+              "title": "Debug user profile and tenant setup via console",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4234,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== CRM API DEBUGGING SESSION ===\n"
+                        },
+                        {
+                          "text": "\n=== ENVIRONMENT ===\n"
+                        },
+                        {
+                          "text": "{\n  \"supabaseUrl\": \"Not set\",\n  \"hasAnonKey\": false,\n  \"nodeEnv\": \"Not set\"\n}\n"
+                        },
+                        {
+                          "text": "\n=== AUTHENTICATION ===\n"
+                        },
+                        {
+                          "text": "{\n  \"hasSession\": false,\n  \"hasUser\": false,\n  \"userId\": null,\n  \"userEmail\": null\n}\n"
+                        },
+                        {
+                          "text": "\n=== DATABASE ===\n"
+                        },
+                        {
+                          "text": "{\n  \"tenantsCount\": 0\n}\n"
+                        },
+                        {
+                          "text": "\n=== ERRORS ===\n"
+                        },
+                        {
+                          "text": "\n=== RECOMMENDATIONS ===\n"
+                        },
+                        {
+                          "text": "❌ User not authenticated - need to log in first\n"
+                        },
+                        {
+                          "text": "✅ No critical errors detected\n"
+                        },
+                        {
+                          "text": "\n=================================\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:40.812Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-6abb1a36ffe84ea2f736",
+              "file": "crm-api-debug.spec.ts",
+              "line": 10,
+              "column": 3
+            },
+            {
+              "title": "Test manual tenant and profile setup",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3760,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== MANUAL SETUP TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== SETUP TEST RESULTS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== FINAL STATE ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== OVERALL SUCCESS: ❌ ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:40.884Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-7596a37cd65931921764",
+              "file": "crm-api-debug.spec.ts",
+              "line": 182,
+              "column": 3
+            },
+            {
+              "title": "Test direct account creation without UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 60000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-safari",
+                  "projectName": "mobile-safari",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2557,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "=== DIRECT ACCOUNT CREATION TEST ===\n"
+                        },
+                        {
+                          "text": "\n=== PREPARATION STEPS ===\n"
+                        },
+                        {
+                          "text": "❌ No authenticated user\n"
+                        },
+                        {
+                          "text": "\n=== ACCOUNT CREATION ATTEMPT ===\n"
+                        },
+                        {
+                          "text": "{}\n"
+                        },
+                        {
+                          "text": "\n=== FINAL RESULT: ❌ FAILED ===\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-18T20:54:44.764Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "df85875f629495e09672-2ab358405e0d6fd40570",
+              "file": "crm-api-debug.spec.ts",
+              "line": 276,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-18T20:53:55.342Z",
+    "duration": 52097.942,
+    "expected": 20,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

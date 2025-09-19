@@ -1,11 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { supabaseAdmin as supabase } from '$lib/server/supabaseAdmin';
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
@@ -173,8 +168,22 @@ async function handleRunAborted(eventData: any, resource: any) {
 }
 
 async function processScrapedData(sessionId: string, scrapedData: any[]) {
+  // Look up user_id from the originating search session for RLS compliance
+  const { data: searchRecord, error: searchError } = await supabase
+    .from('customer_evaluation_searches')
+    .select('user_id')
+    .eq('id', sessionId)
+    .single();
+
+  if (searchError || !searchRecord?.user_id) {
+    throw new Error(`Unable to resolve user for session ${sessionId}: ${searchError?.message || 'not found'}`);
+  }
+
+  const userId = searchRecord.user_id;
+
   const processedData = scrapedData.map(business => ({
     search_session_id: sessionId,
+    user_id: userId,
     business_name: business.title || business.name,
     contact_person: business.contact_person || extractContactPerson(business),
     phone_number: business.phone || business.phoneNumber,

@@ -220,15 +220,15 @@
             </div>
           </a>
           
-          <button class="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors opacity-75">
-            <svg class="h-5 w-5 text-green-600 dark:text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <a href="/crm" class="flex items-center p-4 border-2 border-green-200 dark:border-green-700 bg-green-50 dark:bg-green-900/20 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors group">
+            <svg class="h-6 w-6 text-green-600 dark:text-green-400 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
             </svg>
             <div>
-              <span class="text-gray-700 dark:text-gray-300">CRM Integration</span>
-              <span class="text-gray-500 dark:text-gray-400 text-sm block">Coming soon</span>
+              <span class="text-gray-900 dark:text-gray-100 font-semibold block">CRM Integration</span>
+              <span class="text-green-600 dark:text-green-400 text-sm">Customer Management</span>
             </div>
-          </button>
+          </a>
           
           <button class="flex items-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors opacity-75">
             <svg class="h-5 w-5 text-purple-600 dark:text-purple-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

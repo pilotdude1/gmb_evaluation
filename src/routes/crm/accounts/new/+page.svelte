@@ -171,26 +171,50 @@
         tenant_id: userProfile.current_tenant_id,
       };
 
+      console.log('Attempting to create account with data:', accountData);
+      
       const { data, error: createError } = await crmClient.createAccount(accountData);
       
+      console.log('Account creation response:', { data, createError });
+      
       if (createError) {
+        console.error('Account creation failed:', createError);
         throw createError;
       }
 
       success = true;
       
-      // Redirect to the new account or accounts list after a delay
+      // Redirect to accounts list after a delay (individual account page doesn't exist yet)
       setTimeout(() => {
-        if (data?.id) {
-          goto(`/crm/accounts/${data.id}`);
-        } else {
-          goto('/crm/accounts');
-        }
+        goto('/crm/accounts');
       }, 1500);
 
     } catch (err) {
       console.error('Error creating account:', err);
-      error = err instanceof Error ? err.message : 'Failed to create account';
+      
+      // Provide more specific error messages
+      if (err instanceof Error) {
+        if (err.message.includes('RLS') || err.message.includes('row-level security')) {
+          error = `Permission denied: ${err.message}`;
+        } else if (err.message.includes('foreign key') || err.message.includes('constraint')) {
+          error = `Database constraint error: ${err.message}`;
+        } else if (err.message.includes('network') || err.message.includes('fetch')) {
+          error = `Network error: ${err.message}`;
+        } else {
+          error = `Account creation failed: ${err.message}`;
+        }
+      } else if (typeof err === 'object' && err !== null) {
+        // Handle Supabase error objects
+        if (err.message) {
+          error = `Database error: ${err.message}`;
+        } else if (err.details) {
+          error = `Error details: ${err.details}`;
+        } else {
+          error = `Unknown error: ${JSON.stringify(err)}`;
+        }
+      } else {
+        error = 'Failed to create account - unknown error occurred';
+      }
     } finally {
       loading = false;
     }
