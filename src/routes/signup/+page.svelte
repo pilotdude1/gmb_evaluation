@@ -26,28 +26,77 @@
       
       if (err) {
         console.error('Signup error:', err);
-        error = err.message;
+        
+        // Handle specific database errors
+        if (err.message?.includes('Database error saving new user') || 
+            err.message?.includes('Failed to create profile') ||
+            err.message?.includes('violates row-level security policy')) {
+          error = 'Database configuration issue detected. Please contact support or try again later.';
+          console.error('Database/RLS policy error during signup:', err);
+        } else if (err.message?.includes('User already registered')) {
+          error = 'An account with this email already exists. Please sign in instead.';
+        } else if (err.message?.includes('Password should be at least')) {
+          error = 'Password must be at least 6 characters long.';
+        } else if (err.message?.includes('Invalid email')) {
+          error = 'Please enter a valid email address.';
+        } else {
+          error = err.message || 'An error occurred during signup. Please try again.';
+        }
       } else {
         console.log('Signup successful:', data);
         
-        // Check if user already exists
-        if (data.user && !data.session) {
-          // User exists but needs email confirmation
-          message = 'User already exists! You must sign in.';
-        } else if (data.user && data.session) {
-          // New user created and automatically signed in
-          message = 'Account created successfully! Redirecting to dashboard...';
-          setTimeout(() => {
-            window.location.href = '/dashboard';
-          }, 2000);
+        // Check if user was created successfully
+        if (data.user) {
+          // Check if user was automatically signed in (email confirmation disabled)
+          if (data.session) {
+            // User created and automatically signed in (email confirmation disabled)
+            try {
+              // Attempt to ensure profile exists by calling manual creation function
+              const { data: profileResult, error: profileError } = await supabase.rpc('create_user_profile_manual', {
+                user_id: data.user.id,
+                user_email: data.user.email
+              });
+              
+              if (profileError) {
+                console.warn('Profile creation function error (non-critical):', profileError);
+              } else {
+                console.log('Profile creation result:', profileResult);
+              }
+            } catch (profileErr) {
+              console.warn('Profile creation attempt failed (non-critical):', profileErr);
+            }
+            
+            message = 'Account created successfully! Redirecting to dashboard...';
+            setTimeout(() => {
+              window.location.href = '/dashboard';
+            }, 2000);
+          } else {
+            // User created but no session - this means email confirmation is required
+            // Check if this is a new user or existing user by looking at email_confirmed_at
+            if (data.user.email_confirmed_at) {
+              // User already exists and is confirmed - they should sign in instead
+              message = 'An account with this email already exists. Please sign in instead.';
+            } else {
+              // New user created, needs email confirmation
+              message = 'Account created successfully! Please check your email for a confirmation link to complete your registration.';
+            }
+          }
         } else {
-          // New user created, needs email confirmation
-          message = 'Account created! Please check your email for a confirmation link.';
+          // This shouldn't happen, but handle it gracefully
+          message = 'Account creation in progress. Please check your email for further instructions.';
         }
       }
     } catch (err) {
       console.error('Unexpected signup error:', err);
-      error = 'An unexpected error occurred during signup. Please try again.';
+      
+      // Check if it's a network or database connectivity issue
+      if (err instanceof TypeError && err.message?.includes('fetch')) {
+        error = 'Network error. Please check your connection and try again.';
+      } else if (err.message?.includes('Database error') || err.message?.includes('connection')) {
+        error = 'Database connection issue. Please try again in a moment.';
+      } else {
+        error = 'An unexpected error occurred during signup. Please try again.';
+      }
     }
     
     isLoading = false;
