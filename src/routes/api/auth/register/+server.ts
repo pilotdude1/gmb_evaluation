@@ -1,4 +1,4 @@
-import { json, error } from '@sveltejs/kit';
+import { json, error, HttpError } from '@sveltejs/kit';
 import { db } from '$lib/server/database.js';
 import {
   hashPassword,
@@ -63,6 +63,9 @@ export async function POST({ request }) {
       },
     });
   } catch (err) {
+    if (err instanceof HttpError) {
+      throw err;
+    }
     console.error('Registration error:', err);
     throw error(500, 'Registration failed');
   }
