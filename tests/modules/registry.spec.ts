@@ -5,6 +5,7 @@
  */
 
 import { test, expect } from '@playwright/test';
+import { ModuleRegistry } from '../../src/lib/modules/registry';
 
 // Mock the browser environment for Node.js testing
 const mockBrowser = {
@@ -413,5 +414,80 @@ test.describe('Module Registry System', () => {
     const enabledModules = moduleRegistry.getEnabledModules();
     expect(enabledModules.length).toBe(1);
     expect(enabledModules[0].metadata.id).toBe('test');
+  });
+
+  test('enables dependent modules once dependencies are available', async () => {
+    const registry = new ModuleRegistry();
+
+    const baseMetadata = {
+      description: 'Test module',
+      author: 'Test',
+      conflicts: [],
+      category: 'custom' as const,
+      tags: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    await registry.registerModule('core', async () => ({
+      metadata: {
+        ...baseMetadata,
+        id: 'core',
+        name: 'Core Module',
+        version: '1.0.0',
+        dependencies: []
+      },
+      config: {
+        enabled: false,
+        settings: {},
+        permissions: [],
+        routes: [],
+        api: [],
+        components: [],
+        stores: [],
+        hooks: {}
+      }
+    }));
+
+    await registry.registerModule('reports', async () => ({
+      metadata: {
+        ...baseMetadata,
+        id: 'reports',
+        name: 'Reports Module',
+        version: '1.0.0',
+        dependencies: ['core']
+      },
+      config: {
+        enabled: false,
+        settings: {},
+        permissions: [],
+        routes: [],
+        api: [],
+        components: [],
+        stores: [],
+        hooks: {}
+      }
+    }));
+
+    await expect(registry.enableModule('reports')).rejects.toThrow(/dependency errors/);
+
+    const reportsModuleWithErrors = registry.getModule('reports');
+    expect(reportsModuleWithErrors?.status).toBe('error');
+    expect(
+      reportsModuleWithErrors?.errors.some(error =>
+        error.message.includes('Required dependency core is not enabled')
+      )
+    ).toBe(true);
+
+    await registry.enableModule('core');
+
+    await registry.enableModule('reports');
+
+    const reportsModule = registry.getModule('reports');
+    expect(reportsModule?.config.enabled).toBe(true);
+    expect(reportsModule?.status).toBe('enabled');
+    expect(
+      reportsModule?.errors.some(error => error.message.includes('Required dependency'))
+    ).toBe(false);
   });
 });

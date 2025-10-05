@@ -139,6 +139,7 @@ export class ModuleRegistry {
   private hooks: Map<string, Function[]> = new Map();
   private dependencies: Map<string, ModuleDependency[]> = new Map();
   private conflicts: Map<string, ModuleConflict[]> = new Map();
+  private dependencyErrors: Map<string, Error[]> = new Map();
 
   // Svelte stores for reactive updates
   public readonly modulesStore = writable<Module[]>([]);
@@ -409,9 +410,18 @@ export class ModuleRegistry {
     const dependencies: ModuleDependency[] = [];
     const errors: Error[] = [];
 
+    // Remove any previously recorded dependency errors before recalculating
+    const previousErrors = this.dependencyErrors.get(moduleId);
+    if (previousErrors?.length) {
+      const previousMessages = new Set(previousErrors.map(error => error.message));
+      module.errors = module.errors.filter(error => !previousMessages.has(error.message));
+    } else if (module.errors.length) {
+      module.errors = module.errors.filter(error => !this.isDependencyError(error));
+    }
+
     for (const depId of module.metadata.dependencies) {
       const depModule = this.modules.get(depId);
-      
+
       if (!depModule) {
         errors.push(new Error(`Required dependency ${depId} not found`));
         dependencies.push({ moduleId: depId, version: '*', required: true });
@@ -424,7 +434,8 @@ export class ModuleRegistry {
     }
 
     this.dependencies.set(moduleId, dependencies);
-    
+    this.dependencyErrors.set(moduleId, errors);
+
     if (errors.length > 0) {
       module.errors.push(...errors);
     }
@@ -458,13 +469,12 @@ export class ModuleRegistry {
    * Check if module has dependency errors
    */
   private hasDependencyErrors(moduleId: string): boolean {
-    const module = this.modules.get(moduleId);
-    if (!module) return false;
+    const errors = this.dependencyErrors.get(moduleId);
+    return !!errors && errors.length > 0;
+  }
 
-    return module.errors.some(error => 
-      error.message.includes('Required dependency') || 
-      error.message.includes('not enabled')
-    );
+  private isDependencyError(error: Error): boolean {
+    return error.message.includes('Required dependency');
   }
 
   /**
