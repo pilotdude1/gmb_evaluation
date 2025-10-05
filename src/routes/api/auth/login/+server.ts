@@ -1,4 +1,4 @@
-import { json, error } from '@sveltejs/kit';
+import { json, error, HttpError } from '@sveltejs/kit';
 import { db } from '$lib/server/database.js';
 import { verifyPassword, createUserSession } from '$lib/server/auth.js';
 
@@ -56,6 +56,9 @@ export async function POST({ request, cookies }) {
       },
     });
   } catch (err) {
+    if (err instanceof HttpError) {
+      throw err;
+    }
     console.error('Login error:', err);
     throw error(500, 'Login failed');
   }
